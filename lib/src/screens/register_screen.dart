@@ -1,16 +1,16 @@
-import 'package:corona_app/src/screens/register_screen.dart';
+import 'package:corona_app/src/screens/menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const routeName = '/login-screen';
+class RegisterScreen extends StatefulWidget {
+  static const routeName = '/register-screen';
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   bool isObscurText = true;
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 80,
+                  height: 40,
                 ),
                 Container(
                   height: .75,
@@ -105,16 +105,40 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        obscureText: isObscurText,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: 'Confirm Password',
+                          prefixIcon: Icon(OMIcons.lock),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isObscurText = !isObscurText;
+                              });
+                            },
+                            child: isObscurText
+                                ? Icon(OMIcons.removeRedEye)
+                                : Icon(LineIcons.eye_slash),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
                         height: 40,
                       ),
                       Container(
                         width: double.infinity,
                         height: 55,
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                MenuScreen.routeName, (route) => false);
+                          },
                           elevation: 0.75,
                           child: Text(
-                            'LOGIN',
+                            'REGISTER',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -124,27 +148,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            'Don\'t have an account ?',
+                            'Already have an account ?',
                             style: TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           FlatButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, RegisterScreen.routeName);
-                            },
+                            onPressed: () {},
                             padding: EdgeInsets.zero,
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                             child: Text(
-                              'Register',
+                              'Login',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
