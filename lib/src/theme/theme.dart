@@ -1,9 +1,21 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
 final myTheme = ThemeData(
-  primaryColor: Colors.white,
+  primaryColor: Colors.indigo.shade300,
   scaffoldBackgroundColor: Color(0xFFF8F8FF),
   fontFamily: 'Sen',
+  pageTransitionsTheme: PageTransitionsTheme(
+    builders: {
+      TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+        transitionType: SharedAxisTransitionType.horizontal,
+      ),
+      TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
+        transitionType: SharedAxisTransitionType.horizontal,
+      ),
+    },
+  ),
+  dividerColor: Color(0xFF7777FF),
   textTheme: TextTheme(
     headline1: TextStyle(
       color: Color(0xFF7777FF),

@@ -1,3 +1,4 @@
+import 'package:corona_app/src/screens/login_screen.dart';
 import 'package:corona_app/src/widgets/onboarding_screen/onboarding_model.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,8 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController(initialPage: 0);
-
- final int _numPage = 4;
+  final int _numPage = 4;
   int _currentPage = 0;
-
 
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
@@ -47,6 +46,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -55,14 +60,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         height: screenHeight,
         width: screenWidth,
         padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
           bottom: 16,
         ),
         child: Column(
           children: <Widget>[
             Expanded(
               child: PageView(
+                controller: _pageController,
                 onPageChanged: (page) {
                   setState(() {
                     _currentPage = page;
@@ -101,34 +105,55 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FlatButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Skip',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color(0xFF707070),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      _pageController.animateToPage(
+                        _numPage - 1,
+                        duration: Duration(
+                          milliseconds: 300,
+                        ),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    child: Text(
+                      'Skip',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color(0xFF707070),
+                      ),
                     ),
                   ),
-                ),
-                Row(
-                  children: _buildPageIndicator(),
-                ),
-                RaisedButton(
-                  onPressed: () {},
-                  elevation: 0.75,
-                  child: Text(
-                    'Next',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
+                  Row(
+                    children: _buildPageIndicator(),
                   ),
-                )
-              ],
+                  RaisedButton(
+                    onPressed: () {
+                      if (_currentPage == _numPage - 1) {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, LoginScreen.routeName, (route) => false);
+                      }
+                      _pageController.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    elevation: 0.75,
+                    child: Text(
+                      'Next',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),

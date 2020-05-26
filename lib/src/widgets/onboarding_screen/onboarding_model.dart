@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class OnboardingModel extends StatelessWidget {
   final String imagePath;
   final String simpleTextOne;

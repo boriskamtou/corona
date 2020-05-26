@@ -1,3 +1,4 @@
+import 'package:corona_app/src/screens/login_screen.dart';
 import 'package:corona_app/src/screens/onboarding_screen.dart';
 import 'package:corona_app/src/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Corona Info',
+      debugShowCheckedModeBanner: false,
       theme: myTheme,
       home: OnboardingScreen(),
+      routes: {
+        LoginScreen.routeName: (ctx) => LoginScreen(),
+      },
     );
   }
 }
