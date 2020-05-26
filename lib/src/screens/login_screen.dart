@@ -16,13 +16,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenWith = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
-          child: Container(
-            height: screenHeight,
-            width: screenWith,
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
+        child: Container(
+          height: screenHeight,
+          width: screenWith,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               children: <Widget>[
                 Image.asset(
@@ -66,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   height: .75,
                   width: screenWith,
+                  margin: EdgeInsets.only(bottom: 6),
                   color: Color(0xFF707070),
                 ),
                 SizedBox(
