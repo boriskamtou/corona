@@ -13,6 +13,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController(initialPage: 0);
   final int _numPage = 4;
   int _currentPage = 0;
+  bool isEnd = false;
 
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
@@ -105,56 +106,60 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      _pageController.animateToPage(
-                        _numPage - 1,
-                        duration: Duration(
-                          milliseconds: 300,
+           Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        FlatButton(
+                          onPressed: () {
+                            _pageController.animateToPage(
+                              _numPage - 1,
+                              duration: Duration(
+                                milliseconds: 300,
+                              ),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          padding: EdgeInsets.zero,
+                          child: Text(
+                            'Skip',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xFF707070),
+                            ),
+                          ),
                         ),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    padding: EdgeInsets.zero,
-                    child: Text(
-                      'Skip',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0xFF707070),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: _buildPageIndicator(),
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      if (_currentPage == _numPage - 1) {
-                        Navigator.pushNamedAndRemoveUntil(
+                        Row(
+                          children: _buildPageIndicator(),
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+                            if (_currentPage == _numPage - 1) {
+                             Navigator.pushNamedAndRemoveUntil(
                             context, LoginScreen.routeName, (route) => false);
-                      }
-                      _pageController.nextPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    elevation: 0.75,
-                    child: Text(
-                      'Next',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
+                            }
+                            _pageController.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          elevation: 0.75,
+                          child: Text(
+                            'Next',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   )
-                ],
-              ),
-            ),
+                
+                      
+                    
+                
           ],
         ),
       ),

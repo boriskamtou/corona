@@ -1,7 +1,12 @@
-import 'package:corona_app/src/screens/menu_screen.dart';
+import 'package:corona_app/src/widgets/big_button.dart';
+import 'package:corona_app/src/widgets/spacer/spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
+
+import 'package:corona_app/src/constants/colors.dart';
+import 'menu_screen.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/register-screen';
@@ -11,7 +16,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool isObscurText = true;
+  bool isObscurePassword = true;
+  bool isObscureConfirmPassword = true;
   @override
   Widget build(BuildContext context) {
     final screenWith = MediaQuery.of(context).size.width;
@@ -27,17 +33,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               children: <Widget>[
                 Image.asset(
-                  'assets/icons/corona.png',
+                  'assets/icons/icon.png',
                   width: 120,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                SpaceH30(),
                 RichText(
                   text: TextSpan(
                     text: 'Corona ',
                     style: TextStyle(
-                      color: Color(0xFF7777FF),
+                      color: kIndigo,
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                     ),
@@ -51,9 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                SpaceH20(),
                 Text(
                   'Caring for the future',
                   style: TextStyle(
@@ -61,18 +63,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: Color(0xFF707070),
                   ),
                 ),
-                SizedBox(
-                  height: 40,
-                ),
+                SpaceH40(),
                 Container(
                   height: .75,
                   width: screenWith,
                   margin: EdgeInsets.only(bottom: 6),
                   color: Color(0xFF707070),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SpaceH10(),
                 Form(
                   child: Column(
                     children: <Widget>[
@@ -83,11 +81,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           prefixIcon: Icon(OMIcons.smartphone),
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SpaceH20(),
                       TextFormField(
-                        obscureText: isObscurText,
+                        obscureText: isObscurePassword,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText: 'Password',
@@ -95,20 +91,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           suffixIcon: GestureDetector(
                             onTap: () {
                               setState(() {
-                                isObscurText = !isObscurText;
+                                isObscurePassword = !isObscurePassword;
                               });
                             },
-                            child: isObscurText
+                            child: isObscurePassword
                                 ? Icon(OMIcons.removeRedEye)
                                 : Icon(LineIcons.eye_slash),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SpaceH20(),
                       TextFormField(
-                        obscureText: isObscurText,
+                        obscureText: isObscureConfirmPassword,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText: 'Confirm Password',
@@ -116,40 +110,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           suffixIcon: GestureDetector(
                             onTap: () {
                               setState(() {
-                                isObscurText = !isObscurText;
+                                isObscurePassword = !isObscurePassword;
                               });
                             },
-                            child: isObscurText
+                            child: isObscurePassword
                                 ? Icon(OMIcons.removeRedEye)
                                 : Icon(LineIcons.eye_slash),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 40,
+                      SpaceH40(),
+                      BigButton(
+                        text: 'REGISTER',
+                        onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, MenuScreen.routeName, (route) => false);
+                        },
                       ),
-                      Container(
-                        width: double.infinity,
-                        height: 55,
-                        child: RaisedButton(
-                          onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                MenuScreen.routeName, (route) => false);
-                          },
-                          elevation: 0.75,
-                          child: Text(
-                            'REGISTER',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SpaceH30(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -160,7 +138,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           FlatButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  LoginScreen.routeName, (route) => false);
+                            },
                             padding: EdgeInsets.zero,
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
@@ -169,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF7777FF),
+                                color: kIndigo,
                                 decoration: TextDecoration.underline,
                               ),
                             ),

@@ -1,7 +1,10 @@
-import 'package:corona_app/src/screens/register_screen.dart';
+import 'package:corona_app/src/widgets/big_button.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
+
+import 'package:corona_app/src/screens/register_screen.dart';
+import 'package:corona_app/src/widgets/spacer/spacer.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login-screen';
@@ -11,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isObscurText = true;
+  bool isObscureText = true;
   @override
   Widget build(BuildContext context) {
     final screenWith = MediaQuery.of(context).size.width;
@@ -27,12 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: <Widget>[
                 Image.asset(
-                  'assets/icons/corona.png',
+                  'assets/icons/icon.png',
                   width: 120,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                SpaceH30(),
                 RichText(
                   text: TextSpan(
                     text: 'Corona ',
@@ -51,9 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                SpaceH20(),
                 Text(
                   'Caring for the future',
                   style: TextStyle(
@@ -61,18 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Color(0xFF707070),
                   ),
                 ),
-                SizedBox(
-                  height: 80,
-                ),
+                SpaceH80(),
                 Container(
                   height: .75,
                   width: screenWith,
                   margin: EdgeInsets.only(bottom: 6),
                   color: Color(0xFF707070),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SpaceH10(),
                 Form(
                   child: Column(
                     children: <Widget>[
@@ -83,11 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           prefixIcon: Icon(OMIcons.smartphone),
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SpaceH20(),
                       TextFormField(
-                        obscureText: isObscurText,
+                        obscureText: isObscureText,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText: 'Password',
@@ -95,37 +88,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           suffixIcon: GestureDetector(
                             onTap: () {
                               setState(() {
-                                isObscurText = !isObscurText;
+                                isObscureText = !isObscureText;
                               });
                             },
-                            child: isObscurText
+                            child: isObscureText
                                 ? Icon(OMIcons.removeRedEye)
                                 : Icon(LineIcons.eye_slash),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 40,
+                      SpaceH40(),
+                      BigButton(
+                        text: 'LOGIN',
+                        onPressed: () {},
                       ),
-                      Container(
-                        width: double.infinity,
-                        height: 55,
-                        child: RaisedButton(
-                          onPressed: () {},
-                          elevation: 0.75,
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
+                      SpaceH40(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -166,3 +143,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
