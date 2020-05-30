@@ -27,6 +27,7 @@ dependencies:
   line_icons: ^0.2.0
   flutter_svg: ^0.17.4
   flutter_snake_navigationbar: ^0.4.0+1
+  font_awesome_flutter: ^8.8.1
   http: ^0.12.1
 
   # firebase_auth: ^0.16.1

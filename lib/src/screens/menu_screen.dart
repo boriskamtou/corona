@@ -6,8 +6,8 @@ import 'package:corona_app/src/widgets/spacer/spacer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuScreen extends StatefulWidget {
   static const routeName = '/menu-screen';
@@ -18,8 +18,9 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   Future<CoronaLastInfo> coronaLastInfo;
+  List<double> data;
 
-  Future<CoronaLastInfo> refresh() {
+  Future<void> refresh() {
     return coronaLastInfo =
         Provider.of<CoronaLastInfoProvider>(context, listen: false)
             .fetchCoronaLastInfo();
@@ -28,6 +29,9 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
+    coronaLastInfo = Provider.of<CoronaLastInfoProvider>(context, listen: false)
+        .fetchCoronaLastInfo();
+    data = Provider.of<CoronaLastInfoProvider>(context, listen: false).deaths;
   }
 
   @override
@@ -40,8 +44,8 @@ class _MenuScreenState extends State<MenuScreen> {
         title: Text('Covid - 19 Tracker'),
         centerTitle: true,
       ),
-      body: FutureBuilder<SharedPreferences>(
-        future: SharedPreferences.getInstance(),
+      body: FutureBuilder<CoronaLastInfo>(
+        future: coronaLastInfo,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -49,10 +53,15 @@ class _MenuScreenState extends State<MenuScreen> {
             );
           }
           if (snapshot.hasData) {
-            final updated_at = snapshot.data.getString('updated_at');
+            /*    final updated_at = snapshot.data.getString('updated_at');
             final deaths = snapshot.data.getInt('deaths');
             final recovered = snapshot.data.getInt('recovered');
             final active = snapshot.data.getInt('active');
+
+            final new_confirmed = snapshot.data.getInt('new_confirmed');
+            final new_deaths = snapshot.data.getInt('new_deaths');
+            final new_recovered = snapshot.data.getInt('new_recovered');
+            final is_in_progress = snapshot.data.getBool('is_in_progress');*/
 
             return Container(
               padding: EdgeInsets.all(16),
@@ -68,7 +77,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Text(
-                              'Last update: ${updated_at.substring(11, 19)}',
+                              'Last update: ${snapshot.data.updated_at.substring(11, 19)}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
@@ -78,22 +87,25 @@ class _MenuScreenState extends State<MenuScreen> {
                           CustomItem(
                             color: kRed,
                             title: 'Deaths',
-                            value: deaths,
+                            value: snapshot.data.deaths,
                             imagePath: 'assets/icons/morgue.svg',
+                            isInProgress: snapshot.data.is_in_progress,
                           ),
                           SpaceH10(),
                           CustomItem(
                             color: Colors.green,
-                            title: 'Recovery',
-                            value: recovered,
+                            title: 'Recovered',
+                            value: snapshot.data.recovered,
                             imagePath: 'assets/icons/recovery.svg',
+                            isInProgress: snapshot.data.is_in_progress,
                           ),
                           SpaceH10(),
                           CustomItem(
                             color: Color(0xFFB7A12E),
-                            title: 'Confirmed',
-                            value: active,
+                            title: 'Active',
+                            value: snapshot.data.active,
                             imagePath: 'assets/icons/fear.svg',
+                            isInProgress: false,
                           ),
                         ],
                       ),
@@ -103,7 +115,8 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             );
           } else {
-            return Text('Erreur lors du changement des données.');
+            return Center(
+                child: Text('Erreur lors du changement des données.'));
           }
         },
       ),
@@ -116,8 +129,15 @@ class CustomItem extends StatelessWidget {
   final String title;
   final int value;
   final String imagePath;
+  final bool isInProgress;
 
-  CustomItem({this.color, this.title, this.value, this.imagePath});
+  CustomItem({
+    this.color,
+    this.title,
+    this.value,
+    this.imagePath,
+    this.isInProgress,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -156,13 +176,52 @@ class CustomItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                value.toString(),
-                style: TextStyle(
-                  color: color,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      isInProgress
+                          ? Icon(
+                              FontAwesomeIcons.chartLine,
+                              color: color,
+                            )
+                          : Transform.rotate(
+                              angle: 90,
+                              child: Icon(
+                                FontAwesomeIcons.chartLine,
+                                color: color,
+                              ),
+                            ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      isInProgress
+                          ? Text(
+                              'In progress',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: color,
+                              ),
+                            )
+                          : Text(
+                              'In regress',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: color,
+                              ),
+                            ),
+                    ],
+                  ),
+                  Text(
+                    value.toString(),
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
