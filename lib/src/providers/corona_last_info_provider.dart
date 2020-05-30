@@ -12,7 +12,7 @@ class CoronaLastInfoProvider with ChangeNotifier {
   List<double> get deaths => [..._deaths];
   List<CoronaLastInfo> get coronaLastInfos => _coronaLastInfos;
 
-  Future<List<double>> getAllDeaths() async {
+  /*Future<List<double>> getAllDeaths() async {
     final response = await http.get('https://corona-api.com/timeline');
     List<double> listData = [];
     final List<double> lastData = [];
@@ -35,7 +35,7 @@ class CoronaLastInfoProvider with ChangeNotifier {
     print(listData);
     notifyListeners();
     return listData;
-  }
+  }*/
 
   Future<CoronaLastInfo> fetchCoronaLastInfo() async {
     final response = await http.get('https://corona-api.com/timeline');

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 final myTheme = ThemeData(
   primaryColor: Colors.indigo.shade300,
   scaffoldBackgroundColor: Color(0xFFF8F8FF),
-  brightness: Brightness.dark,
+  brightness: Brightness.light,
   fontFamily: 'Sen',
   pageTransitionsTheme: PageTransitionsTheme(
     builders: {
