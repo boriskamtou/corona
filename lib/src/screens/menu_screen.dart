@@ -5,9 +5,8 @@ import 'package:corona_app/src/widgets/menu_screen/botton_navigation_bar.dart';
 import 'package:corona_app/src/widgets/menu_screen/custom_item.dart';
 import 'package:corona_app/src/widgets/menu_screen/requirement_item.dart';
 import 'package:corona_app/src/widgets/spacer/spacer.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class MenuScreen extends StatefulWidget {
   static const routeName = '/menu-screen';
@@ -19,6 +18,8 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   Future<CoronaLastInfo> coronaLastInfo;
   List<double> data;
+  final _pageController = PageController(initialPage: 0);
+  var _currentPage = 0;
 
   Future<void> refresh() {
     return coronaLastInfo =
@@ -39,43 +40,52 @@ class _MenuScreenState extends State<MenuScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      bottomNavigationBar: MyBottomNavigationBar(),
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('Covid - 19 Tracker'),
-        centerTitle: true,
-      ),
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        child: SingleChildScrollView(
-          child: Container(
-            height: screenHeight,
-            width: screenWidth,
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                FutureBuilder<CoronaLastInfo>(
-                  future: coronaLastInfo,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      /*    final updated_at = snapshot.data.getString('updated_at');
-                      final deaths = snapshot.data.getInt('deaths');
-                      final recovered = snapshot.data.getInt('recovered');
-                      final active = snapshot.data.getInt('active');
+        backgroundColor: Theme.of(context).primaryColor,
+        bottomNavigationBar: MyBottomNavigationBar(
+          currentIndex: _currentPage,
+          onPositionChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+        ),
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('Covid - 19 Tracker'),
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (page) {
+              setState(() {
+                _currentPage = page;
+              });
+            },
+            children: <Widget>[
+              FutureBuilder<CoronaLastInfo>(
+                future: coronaLastInfo,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    /*    final updated_at = snapshot.data.getString('updated_at');
+              final deaths = snapshot.data.getInt('deaths');
+              final recovered = snapshot.data.getInt('recovered');
+              final active = snapshot.data.getInt('active');
 
-                      final new_confirmed = snapshot.data.getInt('new_confirmed');
-                      final new_deaths = snapshot.data.getInt('new_deaths');
-                      final new_recovered = snapshot.data.getInt('new_recovered');
-                      final is_in_progress = snapshot.data.getBool('is_in_progress');*/
+              final new_confirmed = snapshot.data.getInt('new_confirmed');
+              final new_deaths = snapshot.data.getInt('new_deaths');
+              final new_recovered = snapshot.data.getInt('new_recovered');
+              final is_in_progress = snapshot.data.getBool('is_in_progress');*/
 
-                      return Column(
+                    return Expanded(
+                      child: ListView(
+                        physics: BouncingScrollPhysics(),
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -91,7 +101,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             color: kRed,
                             title: 'Deaths',
                             value: snapshot.data.deaths,
-                            imagePath: 'assets/icons/morgue.svg',
+                            imagePath: 'assets/images/death.png',
                             isInProgress: snapshot.data.is_in_progress,
                           ),
                           SpaceH10(),
@@ -99,7 +109,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             color: Colors.green,
                             title: 'Recovered',
                             value: snapshot.data.recovered,
-                            imagePath: 'assets/icons/recovery.svg',
+                            imagePath: 'assets/images/recovery.png',
                             isInProgress: snapshot.data.is_in_progress,
                           ),
                           SpaceH10(),
@@ -107,61 +117,71 @@ class _MenuScreenState extends State<MenuScreen> {
                             color: Color(0xFFB7A12E),
                             title: 'Active',
                             value: snapshot.data.active,
-                            imagePath: 'assets/icons/fear.svg',
+                            imagePath: 'assets/images/active.png',
                             isInProgress: snapshot.data.is_in_progress,
                           ),
+                          SpaceH20(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                'Last cases',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              GestureDetector(
+                                child: Text(
+                                  'More >',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SpaceH20(),
+                          Container(
+                            height: 80,
+                            width: screenWidth,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              children: <Widget>[
+                                RequirementItem(
+                                  label: 'Deaths',
+                                  value: snapshot.data.new_deaths,
+                                ),
+                                RequirementItem(
+                                  label: 'Confirmed',
+                                  value: snapshot.data.new_confirmed,
+                                ),
+                                RequirementItem(
+                                  label: 'Recovery',
+                                  value: snapshot.data.new_recovered,
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
-                      );
-                    } else {
-                      return Center(
-                          child:
-                              Text('Erreur lors du changement des données.'));
-                    }
-                  },
-                ),
-                SpaceH20(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Requirements',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
                       ),
-                    ),
-                    GestureDetector(
-                      child: Text('More >'),
-                    ),
-                  ],
-                ),
-                SpaceH20(),
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
-                    children: <Widget>[
-                      RequirementItem(
-                        imagePath: 'assets/images/gloves.png',
-                        label: 'GLOVES',
+                    );
+                  } else {
+                    return Center(
+                      child: Text(
+                        'Erreur lors du changement des données.',
                       ),
-                      RequirementItem(
-                        imagePath: 'assets/images/mask.png',
-                        label: 'MASK',
-                      ),
-                      RequirementItem(
-                        imagePath: 'assets/images/alcohol.png',
-                        label: 'ALCOHOL',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                    );
+                  }
+                },
+              ),
+              Text('1'),
+              Text('2'),
+              Text('3'),
+            ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

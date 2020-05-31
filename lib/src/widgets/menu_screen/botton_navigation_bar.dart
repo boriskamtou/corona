@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:line_icons/line_icons.dart';
 
-class MyBottomNavigationBar extends StatefulWidget {
-  @override
-  _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
-}
+class MyBottomNavigationBar extends StatelessWidget {
+  final int currentIndex;
+  final Function(int) onPositionChanged;
 
-class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
-  int _selectedItemPosition = 0;
+  MyBottomNavigationBar({this.currentIndex, this.onPositionChanged});
+
   @override
   Widget build(BuildContext context) {
     return SnakeNavigationBar(
@@ -21,13 +20,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       ),
       showUnselectedLabels: true,
       showSelectedLabels: true,
-      padding: EdgeInsets.only(top: 4, left: 8, right: 8, bottom: 8),
-      currentIndex: _selectedItemPosition,
-      onPositionChanged: (index) {
-        setState(() {
-          _selectedItemPosition = index;
-        });
-      },
+      padding: EdgeInsets.only(top: 4, left: 8, right: 8, bottom: 4),
+      currentIndex: currentIndex,
+      onPositionChanged: onPositionChanged,
       items: [
         BottomNavigationBarItem(
             icon: Icon(

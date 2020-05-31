@@ -1,6 +1,5 @@
 import 'package:corona_app/src/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomItem extends StatelessWidget {
@@ -28,7 +27,7 @@ class CustomItem extends StatelessWidget {
         color: kHintBlue,
         shadowColor: kIndigo,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -48,7 +47,7 @@ class CustomItem extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SvgPicture.asset(
+                  Image.asset(
                     imagePath,
                     width: 50,
                     color: color,
