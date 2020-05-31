@@ -20,11 +20,13 @@ class _MenuScreenState extends State<MenuScreen> {
   List<double> data;
   final _pageController = PageController(initialPage: 0);
   var _currentPage = 0;
-
-  Future<void> refresh() {
-    return coronaLastInfo =
-        Provider.of<CoronaLastInfoProvider>(context, listen: false)
-            .fetchCoronaLastInfo();
+  RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+  Future<CoronaLastInfo> refresh() async {
+    setState(() {
+      coronaLastInfo =
+          Provider.of<CoronaLastInfoProvider>(context, listen: false)
+              .fetchCoronaLastInfo();
+    });
   }
 
   @override
@@ -32,7 +34,6 @@ class _MenuScreenState extends State<MenuScreen> {
     super.initState();
     coronaLastInfo = Provider.of<CoronaLastInfoProvider>(context, listen: false)
         .fetchCoronaLastInfo();
-    data = Provider.of<CoronaLastInfoProvider>(context, listen: false).deaths;
   }
 
   @override
@@ -41,6 +42,7 @@ class _MenuScreenState extends State<MenuScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
+        drawer: Drawer(),
         bottomNavigationBar: MyBottomNavigationBar(
           currentIndex: _currentPage,
           onPositionChanged: (index) {
@@ -53,6 +55,12 @@ class _MenuScreenState extends State<MenuScreen> {
           elevation: 0,
           title: Text('Covid - 19 Tracker'),
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search),
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -73,17 +81,8 @@ class _MenuScreenState extends State<MenuScreen> {
                     );
                   }
                   if (snapshot.hasData) {
-                    /*    final updated_at = snapshot.data.getString('updated_at');
-              final deaths = snapshot.data.getInt('deaths');
-              final recovered = snapshot.data.getInt('recovered');
-              final active = snapshot.data.getInt('active');
-
-              final new_confirmed = snapshot.data.getInt('new_confirmed');
-              final new_deaths = snapshot.data.getInt('new_deaths');
-              final new_recovered = snapshot.data.getInt('new_recovered');
-              final is_in_progress = snapshot.data.getBool('is_in_progress');*/
-
-                    return Expanded(
+                    return RefreshIndicator(
+                      onRefresh: refresh,
                       child: ListView(
                         physics: BouncingScrollPhysics(),
                         children: <Widget>[
@@ -120,12 +119,13 @@ class _MenuScreenState extends State<MenuScreen> {
                             imagePath: 'assets/images/active.png',
                             isInProgress: snapshot.data.is_in_progress,
                           ),
+                          SpaceH10(),
                           SpaceH20(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                'Last cases',
+                                'New cases',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -169,10 +169,27 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                     );
                   } else {
-                    return Center(
-                      child: Text(
-                        'Erreur lors du changement des données.',
-                      ),
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Erreur lors du changement des données.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SpaceH10(),
+                        OutlineButton(
+                          onPressed: refresh,
+                          child: Text(
+                            'Réessayer',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     );
                   }
                 },
