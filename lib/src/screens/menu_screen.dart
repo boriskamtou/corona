@@ -20,7 +20,6 @@ class _MenuScreenState extends State<MenuScreen> {
   List<double> data;
   final _pageController = PageController(initialPage: 0);
   var _currentPage = 0;
-  RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
   Future<CoronaLastInfo> refresh() async {
     setState(() {
       coronaLastInfo =
@@ -77,7 +76,9 @@ class _MenuScreenState extends State<MenuScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                      ),
                     );
                   }
                   if (snapshot.hasData) {

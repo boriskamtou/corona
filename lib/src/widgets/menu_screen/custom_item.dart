@@ -17,6 +17,12 @@ class CustomItem extends StatelessWidget {
     this.isInProgress,
   });
 
+  String converter(int num) {
+    final newInt = num.toString();
+    return newInt.replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]} ,');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -92,7 +98,7 @@ class CustomItem extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    value.toString(),
+                    converter(value),
                     style: TextStyle(
                       color: color,
                       fontSize: 22,

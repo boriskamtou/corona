@@ -6,6 +6,11 @@ class RequirementItem extends StatelessWidget {
   final int value;
 
   RequirementItem({this.label, this.value});
+  String converter(int num) {
+    final newInt = num.toString();
+    return newInt.replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]} ,');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,7 @@ class RequirementItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  value.toString(),
+                  converter(value),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Colors.black,
