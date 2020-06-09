@@ -15,22 +15,23 @@ class NewsProvider with ChangeNotifier {
 
   Future<List<News>> fetchNews() async {
     final response = await http.get(
-      'https://newsapi.org/v2/top-headlines?country=us',
+      'https://newsapi.org/v2/top-headlines?q=corona&pageSize=50',
       headers: {HttpHeaders.authorizationHeader: "$API_KEY"},
     );
+    final List<News> loadData = [];
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body)['articles'] as List<dynamic>;
 
-      final List<News> loadData = [];
       result.forEach((jsonData) {
         loadData.add(News.fromJson(jsonData));
       });
 
       _news = loadData;
       notifyListeners();
-
-      return loadData;
+    } else {
+      throw Exception('Failed to load album');
     }
+    return loadData;
   }
 }

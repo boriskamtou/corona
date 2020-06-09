@@ -1,5 +1,6 @@
 import 'package:corona_app/src/constants/colors.dart';
 import 'package:corona_app/src/models/CoronaLastInfo.dart';
+import 'package:corona_app/src/models/news.dart';
 import 'package:corona_app/src/providers/corona_last_info_provider.dart';
 import 'package:corona_app/src/providers/news_api.dart';
 import 'package:corona_app/src/screens/news_screen.dart';
@@ -7,6 +8,8 @@ import 'package:corona_app/src/widgets/menu_screen/botton_navigation_bar.dart';
 import 'package:corona_app/src/widgets/menu_screen/custom_item.dart';
 import 'package:corona_app/src/widgets/menu_screen/requirement_item.dart';
 import 'package:corona_app/src/widgets/spacer/spacer.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -19,9 +22,12 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   Future<CoronaLastInfo> coronaLastInfo;
+  Future<List<News>> news;
   List<double> data;
   final _pageController = PageController(initialPage: 0);
   var _currentPage = 0;
+
+  final dateFormat = DateFormat('hh:MM:ss');
   Future<CoronaLastInfo> refresh() async {
     setState(() {
       coronaLastInfo =
@@ -35,14 +41,14 @@ class _MenuScreenState extends State<MenuScreen> {
     super.initState();
     coronaLastInfo = Provider.of<CoronaLastInfoProvider>(context, listen: false)
         .fetchCoronaLastInfo();
-    context.read<NewsProvider>().fetchNews();
+    news = context.read<NewsProvider>().fetchNews();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        // backgroundColor: Theme.of(context).primaryColor,
         drawer: Drawer(),
         bottomNavigationBar: MyBottomNavigationBar(
           currentIndex: _currentPage,
@@ -63,17 +69,17 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (page) {
-              setState(() {
-                _currentPage = page;
-              });
-            },
-            children: <Widget>[
-              FutureBuilder<CoronaLastInfo>(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (page) {
+            setState(() {
+              _currentPage = page;
+            });
+          },
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: FutureBuilder<CoronaLastInfo>(
                 future: coronaLastInfo,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -95,7 +101,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               'Last update: ${snapshot.data.updated_at.substring(11, 19)}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                           ),
@@ -197,11 +203,62 @@ class _MenuScreenState extends State<MenuScreen> {
                   }
                 },
               ),
-              Text('1'),
-              Text('2'),
-              Text('3'),
-            ],
-          ),
+            ),
+            FutureBuilder<List<News>>(
+              future: news,
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    padding: EdgeInsets.all(16),
+                    itemBuilder: (_, i) {
+                      return Column(
+                        children: <Widget>[
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: FadeInImage(
+                                placeholder:
+                                    AssetImage('assets/images/no_image.jpg'),
+                                image: NetworkImage(
+                                  snapshot.data[i].urlToImage ??
+                                      'https://www.hertrack.com/wp-content/uploads/2018/10/no-image.jpg',
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              snapshot.data[i].publishedAt.substring(11, 19) ??
+                                  'No date',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: kHintRed,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                            subtitle: Text(
+                              snapshot.data[i].title,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Divider(),
+                        ],
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Erreur lors du chargement des données.');
+                }
+
+                return CircularProgressIndicator();
+              },
+            ),
+            Text('2'),
+            Text('3'),
+          ],
         ));
   }
 }

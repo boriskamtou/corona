@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
 final myTheme = ThemeData(
-  primaryColor: Colors.indigo.shade300,
+  primaryColor: Colors.indigo.shade400,
   scaffoldBackgroundColor: Color(0xFFF8F8FF),
   brightness: Brightness.light,
   fontFamily: 'Sen',
