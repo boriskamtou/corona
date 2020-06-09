@@ -1,4 +1,5 @@
 import 'package:corona_app/src/providers/corona_last_info_provider.dart';
+import 'package:corona_app/src/providers/news_api.dart';
 import 'package:corona_app/src/screens/login_screen.dart';
 import 'package:corona_app/src/screens/menu_screen.dart';
 import 'package:corona_app/src/screens/register_screen.dart';
@@ -16,9 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => CoronaLastInfoProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => CoronaLastInfoProvider()),
+        ChangeNotifierProvider(create: (_) => NewsProvider()),
       ],
       child: MaterialApp(
         title: 'Corona Info',

@@ -1,6 +1,7 @@
 import 'package:corona_app/src/constants/colors.dart';
 import 'package:corona_app/src/models/CoronaLastInfo.dart';
 import 'package:corona_app/src/providers/corona_last_info_provider.dart';
+import 'package:corona_app/src/providers/news_api.dart';
 import 'package:corona_app/src/screens/news_screen.dart';
 import 'package:corona_app/src/widgets/menu_screen/botton_navigation_bar.dart';
 import 'package:corona_app/src/widgets/menu_screen/custom_item.dart';
@@ -34,6 +35,7 @@ class _MenuScreenState extends State<MenuScreen> {
     super.initState();
     coronaLastInfo = Provider.of<CoronaLastInfoProvider>(context, listen: false)
         .fetchCoronaLastInfo();
+    context.read<NewsProvider>().fetchNews();
   }
 
   @override
@@ -195,7 +197,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   }
                 },
               ),
-              NewsScreen(),
+              Text('1'),
               Text('2'),
               Text('3'),
             ],

@@ -11,7 +11,6 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<NewsProvider>().fetchNews();
   }
 
   @override

@@ -2,19 +2,35 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:corona_app/src/models/news.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 const API_KEY = '6e5790f55a864136b1b93689f966fdf9';
 
 class NewsProvider with ChangeNotifier {
-  Future<void> fetchNews() async {
+  List<News> _news = [];
+
+  List<News> get news => [..._news];
+
+  Future<List<News>> fetchNews() async {
     final response = await http.get(
-      'https://jsonplaceholder.typicode.com/albums/1',
+      'https://newsapi.org/v2/top-headlines?country=us',
       headers: {HttpHeaders.authorizationHeader: "$API_KEY"},
     );
-    final result = json.decode(response.body);
 
-    print(result);
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body)['articles'] as List<dynamic>;
+
+      final List<News> loadData = [];
+      result.forEach((jsonData) {
+        loadData.add(News.fromJson(jsonData));
+      });
+
+      _news = loadData;
+      notifyListeners();
+
+      return loadData;
+    }
   }
 }
