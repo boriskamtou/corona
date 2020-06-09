@@ -1,6 +1,7 @@
 import 'package:corona_app/src/constants/colors.dart';
 import 'package:corona_app/src/models/CoronaLastInfo.dart';
 import 'package:corona_app/src/providers/corona_last_info_provider.dart';
+import 'package:corona_app/src/screens/news_screen.dart';
 import 'package:corona_app/src/widgets/menu_screen/botton_navigation_bar.dart';
 import 'package:corona_app/src/widgets/menu_screen/custom_item.dart';
 import 'package:corona_app/src/widgets/menu_screen/requirement_item.dart';
@@ -37,7 +38,6 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
@@ -110,7 +110,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             title: 'Recovered',
                             value: snapshot.data.recovered,
                             imagePath: 'assets/images/recovery.png',
-                            isInProgress: snapshot.data.is_in_progress,
+                            isInProgress: true,
                           ),
                           SpaceH10(),
                           CustomItem(
@@ -195,7 +195,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   }
                 },
               ),
-              Text('1'),
+              NewsScreen(),
               Text('2'),
               Text('3'),
             ],

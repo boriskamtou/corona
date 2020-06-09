@@ -7,9 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CoronaLastInfoProvider with ChangeNotifier {
   List<CoronaLastInfo> _coronaLastInfos = [];
-  List<double> _deaths = [];
 
-  List<double> get deaths => [..._deaths];
   List<CoronaLastInfo> get coronaLastInfos => _coronaLastInfos;
 
   /*Future<List<double>> getAllDeaths() async {
@@ -43,6 +41,12 @@ class CoronaLastInfoProvider with ChangeNotifier {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body)['data'] as List<dynamic>;
       final CoronaLastInfo coronaLastInfo = CoronaLastInfo.fromJson(data.first);
+
+      for (int i = 0; i < data.length; i++) {
+        _coronaLastInfos.add(CoronaLastInfo.fromJson(data[i]));
+        notifyListeners();
+      }
+
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('updated_at', coronaLastInfo.updated_at);
       prefs.setInt('deaths', coronaLastInfo.deaths);
@@ -52,10 +56,14 @@ class CoronaLastInfoProvider with ChangeNotifier {
       prefs.setInt('new_deaths', coronaLastInfo.new_deaths);
       prefs.setInt('new_recovered', coronaLastInfo.new_recovered);
       prefs.setBool('is_in_progress', coronaLastInfo.is_in_progress);
-      notifyListeners();
+
       return coronaLastInfo;
     } else {
       throw Exception('Failed to load album');
     }
   }
+
+ 
+
+ 
 }

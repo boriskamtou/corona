@@ -20,7 +20,7 @@ class MyBottomNavigationBar extends StatelessWidget {
       ),
       showUnselectedLabels: true,
       showSelectedLabels: true,
-      padding: EdgeInsets.only(top: 4, left: 8, right: 8, bottom: 4),
+      padding: EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 4),
       currentIndex: currentIndex,
       onPositionChanged: onPositionChanged,
       items: [

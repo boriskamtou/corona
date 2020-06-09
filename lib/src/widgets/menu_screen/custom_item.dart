@@ -20,7 +20,7 @@ class CustomItem extends StatelessWidget {
   String converter(int num) {
     final newInt = num.toString();
     return newInt.replaceAllMapped(
-        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]} ,');
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}, ');
   }
 
   @override
