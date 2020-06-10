@@ -33,6 +33,7 @@ class _MenuScreenState extends State<MenuScreen> {
           Provider.of<CoronaLastInfoProvider>(context, listen: false)
               .fetchCoronaLastInfo();
     });
+    return coronaLastInfo;
   }
 
   @override
@@ -111,7 +112,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             title: 'Deaths',
                             value: snapshot.data.deaths,
                             imagePath: 'assets/images/death.png',
-                            isInProgress: snapshot.data.is_in_progress,
+                            isInProgress: true,
                           ),
                           SpaceH10(),
                           CustomItem(
@@ -127,7 +128,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             title: 'Active',
                             value: snapshot.data.active,
                             imagePath: 'assets/images/active.png',
-                            isInProgress: snapshot.data.is_in_progress,
+                            isInProgress: true,
                           ),
                           SpaceH10(),
                           SpaceH20(),
@@ -139,14 +140,14 @@ class _MenuScreenState extends State<MenuScreen> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                               GestureDetector(
                                 child: Text(
                                   'More >',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color(0xFF707070),
                                   ),
                                 ),
                               ),

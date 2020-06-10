@@ -30,8 +30,8 @@ class CustomItem extends StatelessWidget {
       width: double.infinity,
       child: Card(
         elevation: 4,
-        color: kHintBlue,
-        shadowColor: kIndigo,
+        color: Colors.white,
+        shadowColor: Color(0xFFF8F8FF),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
