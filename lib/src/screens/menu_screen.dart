@@ -22,7 +22,6 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   Future<CoronaLastInfo> coronaLastInfo;
-  Future<List<News>> news;
   List<double> data;
   final _pageController = PageController(initialPage: 0);
   var _currentPage = 0;
@@ -41,12 +40,12 @@ class _MenuScreenState extends State<MenuScreen> {
     super.initState();
     coronaLastInfo = Provider.of<CoronaLastInfoProvider>(context, listen: false)
         .fetchCoronaLastInfo();
-    news = context.read<NewsProvider>().fetchNews();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
         // backgroundColor: Theme.of(context).primaryColor,
         drawer: Drawer(),
@@ -64,7 +63,9 @@ class _MenuScreenState extends State<MenuScreen> {
           centerTitle: true,
           actions: <Widget>[
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(NewsScreen.routeName);
+              },
               icon: Icon(Icons.search),
             ),
           ],
@@ -203,58 +204,6 @@ class _MenuScreenState extends State<MenuScreen> {
                   }
                 },
               ),
-            ),
-            FutureBuilder<List<News>>(
-              future: news,
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    padding: EdgeInsets.all(16),
-                    itemBuilder: (_, i) {
-                      return Column(
-                        children: <Widget>[
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: FadeInImage(
-                                placeholder:
-                                    AssetImage('assets/images/no_image.jpg'),
-                                image: NetworkImage(
-                                  snapshot.data[i].urlToImage ??
-                                      'https://www.hertrack.com/wp-content/uploads/2018/10/no-image.jpg',
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              snapshot.data[i].publishedAt.substring(11, 19) ??
-                                  'No date',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: kHintRed,
-                                letterSpacing: 2,
-                              ),
-                            ),
-                            subtitle: Text(
-                              snapshot.data[i].title,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Divider(),
-                        ],
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Erreur lors du chargement des données.');
-                }
-
-                return CircularProgressIndicator();
-              },
             ),
             Text('2'),
             Text('3'),

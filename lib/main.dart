@@ -2,6 +2,7 @@ import 'package:corona_app/src/providers/corona_last_info_provider.dart';
 import 'package:corona_app/src/providers/news_api.dart';
 import 'package:corona_app/src/screens/login_screen.dart';
 import 'package:corona_app/src/screens/menu_screen.dart';
+import 'package:corona_app/src/screens/news_screen.dart';
 import 'package:corona_app/src/screens/register_screen.dart';
 import 'package:corona_app/src/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         routes: {
           LoginScreen.routeName: (ctx) => LoginScreen(),
           MenuScreen.routeName: (ctx) => MenuScreen(),
+          NewsScreen.routeName: (ctx) => NewsScreen(),
           RegisterScreen.routeName: (ctx) => RegisterScreen(),
         },
       ),

@@ -34,4 +34,8 @@ class NewsProvider with ChangeNotifier {
     }
     return loadData;
   }
+
+  News get firstNews {
+    return _news.first;
+  }
 }
